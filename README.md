@@ -16,11 +16,11 @@ or to add manually:
 ```terminal
 $ sudo vim /etc/yum.repos.d/tdns-server.repo
 [tdns-server]
-name=Technitium DNS server repository
+name=Technitium DNS server
 baseurl=http://tdns-server.s3.eu-west-1.amazonaws.com/linux/$basearch/Packages/
 gpgcheck=0
 enabled=1
-$ sudo yum -y update
-$ sudo yum -y install pdns-server
+$ sudo dnf -y update
+$ sudo dnf -y install pdns-server
 ```
 
