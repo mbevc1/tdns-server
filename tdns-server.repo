@@ -1,0 +1,5 @@
+[tdns-server]
+name=Technitium DNS server repository
+baseurl=http://tdns-server.s3.eu-west-1.amazonaws.com/linux/$basearch/Packages/
+gpgcheck=0
+enabled=1
