@@ -97,27 +97,27 @@ jobs:
           role-session-name: GitHub_Action_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
 
-#      - name: Download files from S3 with AWS CLI
-#        if: success()
-#        run: |
-#          mkdir -p rpm/releases/7/x86_64/
-#          aws s3 sync s3://nextcloud-yum rpm/
-#
-#      - name: Generate C7 repo
-#        run: |
-#          sudo apt install createrepo-c
-#          #cd repo/
-#          #git lfs install
-#          #git lfs track "*.rpm"
-#          #mkdir -p rpm/releases/7/x86_64/
-#          cp -a ./pkg/*.rpm rpm/releases/7/x86_64/
-#          createrepo_c rpm/releases/7/x86_64/
-#          #git add .
-#          #git config --global user.name 'GHA'
-#          #git config --global user.email 'mbevc1@users.noreply.github.com'
-#          #git commit -am "Automated commit"
-#          #git push
-#
-#      - name: Upload files to S3 with AWS CLI
-#        run: |
-#          aws s3 sync rpm/ s3://nextcloud-yum
+      - name: Download files from S3 with AWS CLI
+        if: success()
+        run: |
+          mkdir -p rpm/releases/x86_64/
+          aws s3 sync s3://tdns-server rpm/
+
+      - name: Generate Yum repo
+        run: |
+          sudo apt install createrepo-c
+          #cd repo/
+          #git lfs install
+          #git lfs track "*.rpm"
+          #mkdir -p rpm/releases/x86_64/
+          cp -a ./pkg/*.rpm rpm/releases/x86_64/
+          createrepo_c rpm/releases/x86_64/
+          #git add .
+          #git config --global user.name 'GHA'
+          #git config --global user.email 'mbevc1@users.noreply.github.com'
+          #git commit -am "Automated commit"
+          #git push
+
+      - name: Upload files to S3 with AWS CLI
+        run: |
+          aws s3 sync rpm/ s3://tdns-server
