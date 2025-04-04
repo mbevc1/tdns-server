@@ -109,6 +109,7 @@ if ! systemctl is-active dns.service >/dev/null 2>&1; then
 fi
 
 # Check if something is listening on port 5380 (web console)
+# Wait a bit for service to come up :|
 sleep 1
 if ! ss -tln | grep -q ':5380'; then
     #echo "[ERROR] Port 5380 is not listening." | tee -a $LOGFILE
