@@ -23,7 +23,15 @@ on:
         default: 1
         type: number
 
+# Permission can be added at job level or workflow level
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 env:
+  AWS_ACCOUNT_ID: "243046121444"
+  AWS_REGION: "eu-west-1"
+  AWS_ROLE: "GHA-tdns-server"
   BUILD_NUMBER: 1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -63,33 +71,34 @@ jobs:
           path: pkg/*.rpm
           retention-days: 5
 
-#  deploy:
-#    needs: build
-#    if: success()
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - uses: actions/checkout@v4
-#        name: Checkout release repo
-#        with:
-#          ref: 'main'
-#          #fetch-depth: '0'
-#          #lfs: true
-#          #path: 'repo'
-#
-#      - uses: actions/download-artifact@v4
-#        with:
-#          name: rpm-package
-#          path: pkg/
-#
-#      - name: Configure AWS Credentials
-#        uses: aws-actions/configure-aws-credentials@v4
-#        with:
-#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          aws-region: eu-west-1
-#
+  deploy:
+    needs: build
+    if: success()
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout release repo
+        with:
+          ref: 'main'
+          #fetch-depth: '0'
+          #lfs: true
+          #path: 'repo'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: rpm-package
+          path: pkg/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/${{ env.AWS_ROLE }}
+          role-session-name: GitHub_Action_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
 #      - name: Download files from S3 with AWS CLI
+#        if: success()
 #        run: |
 #          mkdir -p rpm/releases/7/x86_64/
 #          aws s3 sync s3://nextcloud-yum rpm/
