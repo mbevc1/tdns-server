@@ -24,3 +24,6 @@ $ sudo dnf -y update
 $ sudo dnf -y install pdns-server
 ```
 
+## Browsing repo
+
+You can check the content or download packages [here](http://tdns-server.s3-website-eu-west-1.amazonaws.com/) :rocket:
