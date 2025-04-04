@@ -100,7 +100,7 @@ jobs:
       - name: Download files from S3 with AWS CLI
         if: success()
         run: |
-          mkdir -p rpm/releases/x86_64/
+          mkdir -p rpm/releases/noarch/
           aws s3 sync s3://tdns-server rpm/
 
       - name: Generate Yum repo
@@ -110,8 +110,8 @@ jobs:
           #git lfs install
           #git lfs track "*.rpm"
           #mkdir -p rpm/releases/x86_64/
-          cp -a ./pkg/*.rpm rpm/releases/x86_64/
-          createrepo_c rpm/releases/x86_64/
+          cp -a ./pkg/*.rpm rpm/releases/noarch/
+          createrepo_c rpm/releases/noarch/
           #git add .
           #git config --global user.name 'GHA'
           #git config --global user.email 'mbevc1@users.noreply.github.com'
