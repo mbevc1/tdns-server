@@ -17,8 +17,8 @@ Summary:        Technitium DNS Server
 License:        GPL
 URL:            https://technitium.com/dns/
 Source0:        https://download.technitium.com/dns/archive/%{version}/DnsServerPortable.tar.gz
-Source1:        https://raw.githubusercontent.com/TechnitiumSoftware/DnsServer/refs/heads/v%{version}/LICENSE
-Source2:        https://raw.githubusercontent.com/TechnitiumSoftware/DnsServer/refs/heads/v%{version}/README.md
+Source1:        https://raw.githubusercontent.com/TechnitiumSoftware/DnsServer/refs/tags/v%{version}/LICENSE
+Source2:        https://raw.githubusercontent.com/TechnitiumSoftware/DnsServer/refs/tags/v%{version}/README.md
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
@@ -136,6 +136,15 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Mon Apr 07 2025 Marko Bevc <marko@bevc.net> - 13.5.0-1
+- First upgrade package of Technitium DNS Server
+- Parser supports BIND extended zone file format
+- Added feature to filter records in the zone editor based on its name or type
+- Added support for user specified DNSSEC private keys
+- Implemented RFC 8080 to add support for Ed25519 (15) and Ed448 (16) DNSSEC algorithms
+- Added support for writing DNS logs to Console (STDOUT) along with existing option to write to a file
+- Multiple other minor bug fixes and improvements
+
 * Thu Apr 03 2025 Marko Bevc <marko@bevc.net> - 13.4.3-1
 - Initial RPM release of Technitium DNS Server
 - More about changes: https://github.com/TechnitiumSoftware/DnsServer/blob/master/CHANGELOG.md
