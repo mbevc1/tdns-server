@@ -9,7 +9,7 @@ NAME=tdns-server
 CWD:=$(shell pwd -P)
 #SPEC_VER:=$(shell cat nextcloud.spec | grep "define base_version" | awk '{print $$3}')
 BUILD_NUMBER?=1
-VERSION?=13.5.0
+VERSION?=13.6.0
 RELEASE?=$(BUILD_NUMBER)
 
 SPEC:=$(shell ls *.spec)
