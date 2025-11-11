@@ -26,7 +26,7 @@ BuildArch:      noarch
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
-Requires:       systemd, libicu, aspnetcore-runtime-8.0, dotnet-runtime-8.0
+Requires:       systemd, libicu, aspnetcore-runtime-9.0, dotnet-runtime-9.0
 
 %description
 Technitium DNS Server is a cross-platform authoritative and recursive DNS server
