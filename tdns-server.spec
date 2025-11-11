@@ -136,6 +136,14 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sun Nov 09 2025 Marko Bevc <marko@bevc.net> - 14.0.1-1
+- Fixed bugs in the Force Update Block List and Temporary Disable Blocking API calls.
+- Fixed session validation bypass bug during proxying request to another node when Clustering is enabled.
+- Fixed issue of failing to load app config due to text encoding issues.
+- Fixed issue of failure to load old config file versions due to validation failures in some cases.
+- Updated GUI docs for Cluster initialization and joining.
+- Other minor changes and improvements.
+
 * Sat Nov 08 2025 Marko Bevc <marko@bevc.net> - 14.0.0-1
 - Upgraded codebase to use .NET 9 runtime. If you had manually installed the DNS Server or .NET 8 Runtime earlier then you must install .NET 9 Runtime manually before upgrading the DNS server.
 - This major release has a breaking changes in the Change Password HTTP API so its advised to test your API client once before deploying to production.
