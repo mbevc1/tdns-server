@@ -136,6 +136,14 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sun Nov 16 2025 Marko Bevc <marko@bevc.net> - 14.1.0-1
+- Updated Clustering implementation to allow configuring multiple custom IP addresses. This introduces a breaking change in the API and thus all cluster nodes must be upgraded to this release for them to work together.
+- Fixed issues related to user and group permission validation when Clustering is enabled which caused permission bypass when accessing another node.
+- Fixed bug that caused the Advanced Blocking app to stop working.
+- Added environment variables for TLS certificate path, certificate password, and HTTP to HTTPS redirect option. Thanks to simonvandermeer for the PR.
+- Updated Hagezi block list URLs. Thanks to hagezi for the PR.
+- Other minor changes and improvements.
+
 * Sun Nov 09 2025 Marko Bevc <marko@bevc.net> - 14.0.1-1
 - Fixed bugs in the Force Update Block List and Temporary Disable Blocking API calls.
 - Fixed session validation bypass bug during proxying request to another node when Clustering is enabled.
