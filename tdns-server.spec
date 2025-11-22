@@ -136,6 +136,15 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sat Nov 22 2025 Marko Bevc <marko@bevc.net> - 14.2.0-1
+- Fixed bug in Clustering implementation which prevented using IPv4 and IPv6 addresses together. Thanks to @ruifung for the PR.
+- There is also a breaking change in clustering and thus all cluster nodes must be upgraded to this release to avoid issues.
+- Updated the "Allow / Block List URLs" option implementation to support comment entries.
+- Advanced Blocking App: Updated app to implement blockingAnswerTtl option to allow specifying the TTL value used in blocked response.
+- Log Exporter App: Updated the app to add EDNS logging support. Thanks to @zbalkan for the PR.
+- MISP Connector App: Added new app that can block malicious domain names pulled from MISP feeds. Thanks to @zbalkan for the PR.
+- Multiple other minor bug fixes and improvements.
+
 * Sun Nov 16 2025 Marko Bevc <marko@bevc.net> - 14.1.0-1
 - Updated Clustering implementation to allow configuring multiple custom IP addresses. This introduces a breaking change in the API and thus all cluster nodes must be upgraded to this release for them to work together.
 - Fixed issues related to user and group permission validation when Clustering is enabled which caused permission bypass when accessing another node.
