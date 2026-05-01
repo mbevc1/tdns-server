@@ -9,6 +9,9 @@
 #%else
 %endif
 
+%global dns_user  dns-server
+%global dns_group dns-server
+
 Name:           tdns-server
 Version:        %{_version}
 Release:        %{_release}%{?dist}
@@ -23,6 +26,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 BuildArch:      noarch
 #BuildRequires:  systemd tar
+Requires(pre):      shadow-utils
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
@@ -32,7 +36,9 @@ Requires:       systemd, libicu, aspnetcore-runtime-10.0, dotnet-runtime-10.0
 Technitium DNS Server is a cross-platform authoritative and recursive DNS server
 with DNS-over-HTTPS, DNS-over-TLS, and more.
 
-This package installs the server to /opt/technitium/dns/.
+This package installs the server to /opt/technitium/dns/ and runs it as the
+unprivileged '%{dns_user}' system user, matching the upstream hardened systemd
+unit.
 
 %prep
 mkdir -p tdns
@@ -58,15 +64,35 @@ cp %{buildroot}/opt/technitium/dns/systemd.service %{buildroot}/etc/systemd/syst
 # Create config directory
 mkdir -p %{buildroot}/etc/dns
 
+# Create log directory (referenced by ReadWritePaths= in unit)
+mkdir -p %{buildroot}/var/log/technitium/dns
+
 %files
 %license LICENSE
 %doc %{_docdir}/%{name}
-/opt/technitium/
+%attr(-, %{dns_user}, %{dns_group}) /opt/technitium/
 /etc/systemd/system/dns.service
-%dir /etc/dns
+%dir %attr(0750, %{dns_user}, %{dns_group}) /etc/dns
+%dir %attr(0750, %{dns_user}, %{dns_group}) /var/log/technitium
+%dir %attr(0750, %{dns_user}, %{dns_group}) /var/log/technitium/dns
 #%config(noreplace) /etc/dns/auth.config
 #%config(noreplace) /etc/dns/dns.config
 #%config(noreplace) /etc/dns/log.config
+
+%pre
+# Create the dns-server group and user before files are laid down so that
+# %attr() ownership in %files resolves correctly.
+getent group %{dns_group} >/dev/null || \
+    groupadd --system %{dns_group}
+getent passwd %{dns_user} >/dev/null || \
+    useradd --system \
+            --no-create-home \
+            --gid %{dns_group} \
+            --home-dir /opt/technitium/dns \
+            --shell /usr/sbin/nologin \
+            --comment "Technitium DNS Server" \
+            %{dns_user}
+exit 0
 
 %post
 %systemd_post dns.service
@@ -85,6 +111,26 @@ mkdir -p %{buildroot}/etc/dns
 #    semanage port -a -t http_port_t -p tcp 5380 2>/dev/null || :
 #    #echo "[INFO] Labeled port 5380 with SELinux http_port_t." >> $LOGFILE
 #fi
+
+# Make sure existing data from older versions (where the service ran as root)
+# is owned by the dns-server user on install/upgrade.
+if [ $1 -ge 1 ]; then
+    chown -R %{dns_user}:%{dns_group} /etc/dns /var/log/technitium /opt/technitium/dns >/dev/null 2>&1 || :
+fi
+
+# Warn (but do not auto-disable) if systemd-resolved is occupying port 53.
+# The upstream install.sh disables systemd-resolved unconditionally; we leave
+# that decision to the operator since it is an invasive change to system
+# networking. Without this, dns.service will fail to bind port 53 on most
+# modern distros.
+if systemctl is-active systemd-resolved >/dev/null 2>&1; then
+    echo
+    echo "WARNING: systemd-resolved is active and likely holding port 53."
+    echo "         dns.service may fail to bind. To free port 53:"
+    echo "             systemctl disable --now systemd-resolved"
+    echo "             systemctl restart dns.service"
+    echo
+fi
 
 # Enable and start service on initial install only
 if [ $1 -eq 1 ]; then
@@ -130,6 +176,16 @@ fi
 
 %postun
 %systemd_postun_with_restart dns.service
+
+# On full uninstall remove the system user and group we created in %pre.
+if [ $1 -eq 0 ]; then
+    if getent passwd %{dns_user} >/dev/null; then
+        userdel %{dns_user} >/dev/null 2>&1 || :
+    fi
+    if getent group %{dns_group} >/dev/null; then
+        groupdel %{dns_group} >/dev/null 2>&1 || :
+    fi
+fi
 
 %check
 echo "Skipping runtime validation during RPM build."
