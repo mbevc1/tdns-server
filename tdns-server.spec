@@ -26,7 +26,7 @@ BuildArch:      noarch
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
-Requires:       systemd, libicu, aspnetcore-runtime-9.0, dotnet-runtime-9.0
+Requires:       systemd, libicu, aspnetcore-runtime-10.0, dotnet-runtime-10.0
 
 %description
 Technitium DNS Server is a cross-platform authoritative and recursive DNS server
@@ -136,6 +136,42 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sat Apr 25 2026 Marko Bevc <marko@bevc.net> - 15.0.0-1
+- Upgraded codebase to use .NET 10 runtime. If you had manually installed the DNS Server or .NET Runtime earlier then you must install .NET 10 Runtime manually before upgrading the DNS Server.
+- Updated the DNS Server's install script for Linux to install the DNS Server to run as a non-root systemd service. Existing installations would work the same after the upgrade.
+- Updated the DNS Server's Installer for Windows to install the DNS Server to run as a non-system service. Existing installations would work the same after the upgrade.
+- The HTTP API now supports passing session token via the Authorization: Bearer <token> HTTP header. The older token parameter in query string and form data is supported for backward compatibility.
+- Breaking change in DNS Server Cluster setup: all nodes must be upgraded for the Cluster to work.
+- Added support for Single Sign-On (SSO) with OpenID Connect (OIDC). Thanks to @zstinnett for the PR.
+- Added new EDNS Client Subnet (ECS) Source Address feature to read client's source IP address from the ECS option in DNS requests over UDP or TCP.
+- Added new option in Import Zone feature to allow overwriting entire zone such that only the records being imported will exist (along with zone's SOA record) after the import process.
+- Added option to manually activate primary zone's Key Signing Key (KSK) status to prevent regular DS record lookups in parent zone.
+- Added new option in Settings > General section to configure UDP listener socket send and receive buffer size.
+- Added support for Prometheus with new metrics API call that returns lifetime counters.
+- Updated DNS Server to dynamically bind UDP listeners to local interface IP address on first request to ANY address, ensuring responses are sent on the correct interface.
+- Updated DHCP Server's DNS entry management to allow having persistent DNS records for reserved leases with hostname configured even when reserved lease was not allocated.
+- Implemented new IPv6 Mode option in DNS Server for better performance on dual-stack networks.
+- Implemented support for EDNS EXPIRE option (RFC 7314).
+- Fixed bug in DNS-over-QUIC (DoQ) optional protocol that caused the DoQ service to fail to accept new connections.
+- Fixed DNS amplification vulnerability caused by Self-Pointed Glue Records. Reported by Shuhan Zhang, Dan Li, and Baojun Liu from Tsinghua University.
+- Fixed DNS amplification vulnerability caused by Aggressive Fetching of DNSSEC Records. Reported by Shuhan Zhang, Dan Li, and Baojun Liu from Tsinghua University.
+- Fixed DNS amplification vulnerability caused by Cyclic Name Server Delegation. Reported by Qifan Zhang, Palo Alto Networks.
+- Implemented new Change Theme menu feature with support for automatic dark/light mode based on host system's theme.
+- Added a new Amber theme for improved visual ergonomics and accessibility. Thanks to @daedaevibin for the PR.
+- The Logs > Query Logs section now supports Live Update feature for automatically refreshing query logs in results.
+- The Dashboard now includes a convenient option at Top Blocked Domains to enable/disable blocking.
+- Query Logs (PostgreSQL) App: Added new app to support PostgreSQL as the backend database for query logs. Thanks to @scj643 for the PR.
+- Query Logs (Sqlite, MySQL, SQL Server) Apps: Updated pagination logic to significantly improve query performance. Thanks to @jimstrang for the PR.
+- Block Page App: Updated the app to implement online SSL certificate signing feature to allow it to do SSL MiTM when app's self-signed root certificate is installed on client systems.
+- Wild IP App: Added new allowedNetworks option in the APP record data config for configuring allowed networks to prevent misuse/abuse.
+- Drop Requests App: Added new allowedLocalEndPoints option to allow requests coming only from the listed DNS Server Local End Points.
+- Geo Continent App and Geo Country App: Updated apps to support Autonomous System Number (ASN) entries in APP record data.
+- MISP Connector App: Removed the app since it is not feasible to be supported.
+- All DNS Apps now support comments in its JSON config. The APP record data JSON too now supports comments.
+- All DNS Apps now include a Read Me file in MD format. Thanks to @zbalkan for the PR.
+- Fresh installation of DNS Server now uses platform specific log folder path.
+- Multiple other minor bug fixes and improvements.
+
 * Tue Dec 23 2025  Marko Bevc <marko@bevc.net> - 14.3.0-1
 - Added support for Dark Mode. Thanks to @skidoodle for the PR.
 - Updated Catalog zones implementation to allow adding Secondary zones as members.
