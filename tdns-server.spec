@@ -136,6 +136,12 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sun Apr 26 2026 Marko Bevc <marko@bevc.net> - 15.0.1-1
+- Fixed issue that caused cluster API token to fail to sync when a secondary node joins a cluster.
+- Fixed issue of incorrect sync state for SSO group map on secondary nodes.
+- Added SSO scopes required by some SSO providers.
+- Fixed typo in Prometheus metrics API text output.
+
 * Sat Apr 25 2026 Marko Bevc <marko@bevc.net> - 15.0.0-1
 - Upgraded codebase to use .NET 10 runtime. If you had manually installed the DNS Server or .NET Runtime earlier then you must install .NET 10 Runtime manually before upgrading the DNS Server.
 - Updated the DNS Server's install script for Linux to install the DNS Server to run as a non-root systemd service. Existing installations would work the same after the upgrade.
