@@ -192,6 +192,11 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sun May 03 2026 Marko Bevc <marko@bevc.net> - 15.1.0-1
+- Added option to allow configuring SSO Scopes as required by the SSO provider.
+- Updated Prometheus metrics API text output to use correct naming convention.
+- Multiple other minor bug fixes and improvements.
+
 * Sun Apr 26 2026 Marko Bevc <marko@bevc.net> - 15.0.1-1
 - Fixed issue that caused cluster API token to fail to sync when a secondary node joins a cluster.
 - Fixed issue of incorrect sync state for SSO group map on secondary nodes.
