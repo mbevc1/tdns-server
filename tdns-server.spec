@@ -192,6 +192,12 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sat May 09 2026 Marko Bevc <marko@bevc.net> - 15.2.0-1
+- Updated SSO implementation to read claims from user info endpoint when available and to use HttpClientNetworkHandler as backchannel.
+- Added new Web Service Reverse Proxy Addresses option to allow defining reverse proxies that are allowed such that Real IP header only works for these proxies.
+- The Settings API has been updated to rename reverseProxyNetworkACL option to dnsReverseProxyNetworkACL to avoid confusion since this option is used only with DNS Optional Protocols.
+- Multiple other minor bug fixes and improvements.
+
 * Sun May 03 2026 Marko Bevc <marko@bevc.net> - 15.1.0-1
 - Added option to allow configuring SSO Scopes as required by the SSO provider.
 - Updated Prometheus metrics API text output to use correct naming convention.
