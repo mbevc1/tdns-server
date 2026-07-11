@@ -15,7 +15,7 @@ on:
       version:
         description: 'Version:'
         required: true
-        default: '15.3.0'
+        default: '15.4.0'
         type: string
       buildNumber:
         description: 'Build number:'

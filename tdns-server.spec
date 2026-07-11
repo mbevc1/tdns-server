@@ -192,6 +192,12 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sat Jul 11 2026 Marko Bevc <marko@bevc.net> - 15.4.0-1
+- Fixed issue with UDP socket binding that cause response routing issues for a few of deployment scenarios.
+- Fixed issues with RFC compliance checks causing issues with resolution and zone transfer in some cases.
+- Added support for Unix Domain Sockets (UDS) for Web Service over HTTPS and DNS-over-HTTPS optional protocol.
+- Other minor bug fixes and improvements.
+
 * Mon Jul 06 2026 Marko Bevc <marko@bevc.net> - 15.3.0-1
 - Fixed multiple RFC compliance issues reported by Yuxiao Wu, Yunyi Zhang, Baojun Liu, and Haixin Duan from Tsinghu University.
 - Fixed an issue reported by Lawrence LUO Junhua in the Apps section default permissions by removing the Delete permission for DNS Administrators group. This permissions can be misused by users in the DNS Administrators group to perform privilege escalation to get access to the DNS server's Administration section. For existing installations, it is recommended to manually remove the Delete permission for DNS Administrators group for the Apps section.
