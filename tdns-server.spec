@@ -192,6 +192,12 @@ echo "Skipping runtime validation during RPM build."
 exit 0
 
 %changelog
+* Sat Sep 26 2026 Marko Bevc <marko@bevc.net> - 15.5.1-1
+- Fixed issues with recursive resolver limits causing issues with resolution for some domain names.
+- Fixed session token prefix oracle vulnerability reported by Elias Hasas from Brickell Technologies LLC, that allowed an low privilege user to recover full session token for any user's active session.
+- Fixed XSS vulnerability in Logs view reported by Yutthavuth Kak from Karpia Cyber that can be triggered by an attacker who can independently create file with arbitrary name on the server and has DNS Administrator privilege.
+- Multiple other minor bug fixes and improvements.
+
 * Sat Sep 19 2026 Marko Bevc <marko@bevc.net> - 15.5.0-1
 - Added support for LDAP authentication. Thanks to Roy Hagland (@Hemsby) for the PR #1869.
 - Implemented support for draft-farrokhi-dnsop-ede-nta. NTA can be added by creating a Conditional Forwarder zone for the domain name with DNSSEC validation disabled. The FWD record's comments are used with the Extended DNS Error (EDE) included in the response.
